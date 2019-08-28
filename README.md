@@ -10,6 +10,7 @@ This accesses datastore via default service account authentication. You may need
 Required:   
 * KIND = kind of datastore entity (need not exist)
 * ID = ID/name of datastore entity (need not exist)
+* GCP_KEY = base 64 encoded .json service account key
 
 Optional:   
 * PROJECT_ID = The GCP Project ID where the datastore can be found, if different than cloud run's project

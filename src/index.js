@@ -1,13 +1,21 @@
 
 console.log('COLD START');
 
+const {GCP_KEY} = process.env;
+const b = Buffer.from(GCP_KEY, "base64");
+const fs = require("fs");
+
+fs.writeFileSync("/tmp/key.json", b);
+process.env.GOOGLE_APPLICATION_CREDENTIALS="/tmp/key.json";
+
 const express = require("express");
+
 
 const startModuleLoadTime = Date.now();
 const {Datastore} = require('@google-cloud/datastore');
 const moduleLoadTime = Date.now() - startModuleLoadTime;
 
-const {PORT, PROJECT_ID, NAMESPACE, KIND, ID} = process.env;
+const {PORT, NAMESPACE, KIND, ID} = process.env;
 
 const app = express();
 app.listen(PORT, () => {
@@ -15,9 +23,6 @@ app.listen(PORT, () => {
 })
 
 const dsOptions = {}
-if (PROJECT_ID) {
-    dsOptions.projectId = PROJECT_ID;
-}
 if (NAMESPACE) {
     dsOptions.namespace = NAMESPACE;
 }
