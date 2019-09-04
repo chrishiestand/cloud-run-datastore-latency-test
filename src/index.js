@@ -7,7 +7,7 @@ const startModuleLoadTime = Date.now();
 const {Datastore} = require('@google-cloud/datastore');
 const moduleLoadTime = Date.now() - startModuleLoadTime;
 
-const {PORT, PROJECT_ID, NAMESPACE, KIND, ID} = process.env;
+const {PORT, PROJECT_ID, NAMESPACE, KIND, ID, CLIENT_EMAIL, PRIVATE_KEY} = process.env;
 
 const app = express();
 app.listen(PORT, () => {
@@ -21,6 +21,15 @@ if (PROJECT_ID) {
 if (NAMESPACE) {
     dsOptions.namespace = NAMESPACE;
 }
+
+if (CLIENT_EMAIL && PRIVATE_KEY) {
+    const privateKey0a = PRIVATE_KEY.replace(/\\n/g, "\n");
+    dsOptions.credentials = {
+        client_email: CLIENT_EMAIL,
+        private_key: privateKey0a,
+    }
+}
+
 const datastore = new Datastore(dsOptions);
 
 async function test(req, res) {
